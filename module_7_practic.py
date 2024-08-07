@@ -1,112 +1,51 @@
-import tkinter
-import os
-from tkinter import filedialog as fd
+from tkinter import *
 from tkinter.messagebox import showinfo
-
-window = tkinter.Tk()
-window.title('Проводник')
-window.geometry('353x220+300+300')
-window.configure(bg='gray25')
-window.resizable(False, False)
+from tkinter import filedialog
 
 
-def file_select():
-    filename = fd.askopenfilename(initialdir='/',
-                                  title='Выбрать файл',
-                                  filetypes=(('Файл', '.txt'),)
-                                  )
-    text['text'] += "  " + filename
-    os.startfile(filename)
+root = Tk()
+root.title('Проводник')
+root.geometry('350x300+300+300')
 
 
-def close_wind():
-    window.destroy()
+def file_wind():
+    file_name = filedialog.askopenfilename(initialdir='/')
+    with open(file_name, 'r', encoding='utf-8') as f:
+        text = f.read()
+        text_wind.delete('1.0', END)
+        text_wind.insert('1.0', text)
 
 
 def info_wind():
-    showinfo(title='info', message='Инструкции работы окна Проводник:''\n'
-                                   '1. нажмите на кнопку Выбор фала''\n'
+    showinfo(title='Info', message='Инструкции работы окна Проводник:''\n'
+                                   '1. нажмите на кнопку Выбор фаЙла''\n'
                                    '2. откроется диск для выбора файлов''\n'
                                    '3. выберите файл')
 
 
 def admin_wind():
-    showinfo(title='admin', message='Вячеслав Аллабергенов''\n'
+    showinfo(title='Admin', message='Вячеслав Аллабергенов''\n'
                                     "Курс Python - разработчик"'\n'
                                     'Университет Urban')
 
 
-text = tkinter.Label(text='Файл',
-                     height=4,
-                     width=49,
-                     background='white',
-                     fg='blue',
-                     bd=4,
-                     relief=tkinter.RIDGE
-                     )
-text.place(x=0, y=55)
+text_wind = Text(root)
+text_wind.grid(column=0, columnspan=2, row=0)
 
-button_select = tkinter.Button(text='Выбрать файл',
-                               height=3,
-                               width=20,
-                               bg='silver',
-                               fg='blue',
-                               cursor="hand2",
-                               bd=4,
-                               activebackground='gold',
-                               relief=tkinter.RAISED,
-                               command=file_select
-                               )
-button_select.place(x=0, y=150)
+main_menu = Menu(root)
+root.config(menu=main_menu)
 
-button_select_1 = tkinter.Button(text='Закрыть окно',
-                                 height=3,
-                                 width=20,
-                                 bg='silver',
-                                 fg='blue',
-                                 cursor="hand2",
-                                 bd=4,
-                                 activebackground='gold',
-                                 relief=tkinter.RAISED,
-                                 command=close_wind
-                                 )
-button_select_1.place(x=199, y=150)
+file_menu = Menu(main_menu, tearoff=0)
+file_menu.add_command(label='Выберите файл', command=file_wind)
 
-button_select_2 = tkinter.Button(text='info',
-                                 height=1,
-                                 width=10,
-                                 pady=5,
-                                 background='silver',
-                                 fg='blue',
-                                 bd=4,
-                                 cursor="hand2",
-                                 relief=tkinter.RAISED,
-                                 command=info_wind
-                                 )
-button_select_2.place(x=0, y=1)
+info_menu = Menu(main_menu, tearoff=0)
+info_menu.add_command(label='О программе', command=info_wind)
 
-# button_select_3 = tkinter.Button(text='version',
-#                                  height=1,
-#                                  width=10,
-#                                  pady=5,
-#                                  background='silver',
-#                                  fg='blue',
-#                                  bd=4,
-#                                  cursor="hand2",
-#                                  relief=tkinter.RAISED
-#                                  )
-# button_select_3.place(x=135, y=1)
+admin_menu = Menu(main_menu, tearoff=0)
+admin_menu.add_command(label='Информация о разработчике', command=admin_wind)
 
-button_select_4 = tkinter.Button(text='admin',
-                                 height=1,
-                                 width=10,
-                                 pady=5,
-                                 background='silver',
-                                 fg='blue',
-                                 bd=4,
-                                 cursor="hand2",
-                                 relief=tkinter.RAISED,
-                                 command=admin_wind
-                                 )
-button_select_4.place(x=270, y=1)
-window.mainloop()
+main_menu.add_cascade(label='File', menu=file_menu)
+main_menu.add_cascade(label='Info', menu=info_menu)
+main_menu.add_cascade(label='Admin', menu=admin_menu)
+
+root.mainloop()
